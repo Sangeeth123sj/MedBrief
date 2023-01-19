@@ -1,87 +1,101 @@
 <template>
 <br/>
 <div class="input-report">
-    <form @submit.prevent="submitForm" v-if="!formSubmitted">
-      <br />
-
+    <form @submit.prevent="submitForm">
+      
+ <div v-if="loadingResult" >
+            <strong>Creating a summary..</strong>
+          </div>
+      <div v-else>
+        <br />
+      </div>
       <textarea
         class="form-control black-border"
         rows="18"
        
         type="text"
-        v-model="prompt"
+        v-model="text"
         placeholder="input the Report"
         required
       />
       
 
       <br />
-      
+       
       
       <button type="submit" class="submit button-3" role="button">
-        Submit
+        Submit <div v-if="loadingResult" >
+            <i class="fa fa-spinner fa-spin"></i>
+          </div>
       </button>
+      
+      <button type="button" @click="revertToReport" class="btn btn-outline-success">Back to report</button>
+      
     </form>
 
 </div>
 </template>
 <script>
 // import axios from "axios";
-
+import Cookies from "js-cookie";
 export default {
   data() {
     return {
-      initialPrompt: null,
-      prompt: "",
+      initialPrompt:null,
+      loadingResult: false,
+      text: "",
+      
       
       
     };
   },
 
   methods: {
-    
+    revertToReport(){
+      this.text = this.initialPrompt;
+    },
     submitForm: function () {
-      this.formSubmitted = true;
+      this.loadingResult = true;
+      console.log(this.loadingResult)
 
-      this.accessToken = Cookies.get("access_token");
+      
+      // this.text = Cookies.get("report");
 
-      if (this.negativePrompt) {
+     
         try {
           fetch(
             // "http://127.0.0.1:8000/generate_bookcover/" +
-            "https://endpoint" 
-              ,
-            {
-              headers: {
-                Accept: "application/json",
-                Authorization: `Bearer ${this.accessToken}`,
-              },
-            }
+            "http://127.0.0.1:8000/summarize/" + this.text,
+            // {
+            //   headers: {
+            //     Accept: "application/json",
+            //     Authorization: `Bearer ${this.accessToken}`,
+            //   },
+            // }
           )
             .then((response) => {
               return response.json();
             })
             .then((data) => {
-              console.log(data["file"]);
-              if (data["file"] == "not logged in") {
-                this.login_status = false;
-                // delete the 'access_token' cookie
-                Cookies.remove("access_token");
-
-                // redirect to the home view
-                router.push("/login");
-              }
-              this.image = data["file"];
-
-              this.totalImages = data["totalImages"];
+              console.log(data["summary"]);
+              
+              this.initialPrompt = this.text;
+              this.text = data["summary"];
+              this.loadingResult = false;
+              // set an HTTP-only cookie with the 'access_token' value
+              Cookies.set("report", this.text, { secure: true });
+              console.log("cookie report:", Cookies.get("report"))
+              console.log("this.text", this.text)
             });
         } catch (error) {
           console.log(error);
-          // redirect to the home view
-          router.push("/profile");
+          this.text = "Something went wrong please try again";
+          this.loadingResult = false;
+
         }
+        
       
-      }
+      
     },
 
     
@@ -116,6 +130,7 @@ input[type="range"] {
   align-items: justify-content;
 }
 .button-3 {
+float: left;
   appearance: none;
   background-color: #2ea44f;
   border: 1px solid rgba(27, 31, 35, 0.15);

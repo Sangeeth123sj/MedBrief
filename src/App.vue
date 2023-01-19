@@ -1,6 +1,8 @@
 
 <template>
-<h1>MedBrief</h1>
+<div>
+<h1>MedBrief  <img src="/src/assets/logo.png" class="align-logo" width="30" height="30" /></h1>
+</div>
  <div class="container">
   <div class="row">
     <div class="col-8">
@@ -28,5 +30,8 @@ import ChatBox from "./components/ChatBox.vue"
 }
 .logo.vue:hover {
   filter: drop-shadow(0 0 2em #42b883aa);
+}
+.align-logo{
+  display: inline-block;
 }
 </style>
