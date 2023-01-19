@@ -64,8 +64,9 @@ export default {
      
         try {
           fetch(
-            // "http://127.0.0.1:8000/generate_bookcover/" +
-            "http://127.0.0.1:8000/summarize/" + this.text,
+            
+            // "http://127.0.0.1:8000/summarize/"
+            "https://medbriefbackend-production.up.railway.app/summarize/" + this.text,
             // {
             //   headers: {
             //     Accept: "application/json",

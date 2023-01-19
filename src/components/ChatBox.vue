@@ -58,8 +58,9 @@ export default {
         this.reportStatus = true
          try {
           fetch(
-            // "http://127.0.0.1:8000/generate_bookcover/" +
-            "http://127.0.0.1:8000/q_and_a/" + this.report+`\nQuestion:`+this.question,
+            
+            // "http://127.0.0.1:8000/q_and_a/" 
+            "https://medbriefbackend-production.up.railway.app/q_and_a/"+ this.report+`\nQuestion:`+this.question,
             // {
             //   headers: {
             //     Accept: "application/json",
