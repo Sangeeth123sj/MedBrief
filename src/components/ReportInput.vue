@@ -7,7 +7,8 @@
             <strong>Creating a summary..</strong>
           </div>
       <div v-else>
-        <br />
+        <strong>SUMMARY</strong>
+
       </div>
       <textarea
         class="black-border"
@@ -32,18 +33,34 @@
       <button type="button" @click="revertToReport" class="btn btn-outline-success">Back to report</button>
       
     </form>
+    <br/><br/>
+    <div v-if="!loadingResult && formSubmitted" class="specifics">
+      <ul>
+       <li><strong>Keywords:</strong> {{this.keywords}}</li>
+       <br/>
+          <li><strong>Medicine:</strong> {{this.medicines}}</li>
+          <br/>
+          <li><strong>Lifestyle:</strong> {{this.lifestyle}}</li>
+          <br/>
+        </ul>
+    </div>
 
 </div>
 </template>
 <script>
-// import axios from "axios";
+
 import Cookies from "js-cookie";
+import axios from 'axios';
 export default {
   data() {
     return {
       initialPrompt:null,
       loadingResult: false,
       text: "",
+      formSubmitted: false,
+      keywords: null,
+      medicines: null,
+      lifestyle: null,
       
       
       
@@ -55,49 +72,62 @@ export default {
       this.text = this.initialPrompt;
     },
     submitForm: function () {
+      this.formSubmitted = true;
       this.loadingResult = true;
       console.log(this.loadingResult)
 
-      
-      // this.text = Cookies.get("report");
+                        
+          axios.post(
+                  // "http://127.0.0.1:8000/summarize/",
+                  "https://medbriefbackend-production.up.railway.app/summarize/" ,
+                  
+                  {
+                    text: this.text,
+                  },
+                  {
+                    headers: {
+                      "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                  }
+                )
 
-     
-        try {
-          fetch(
-            
-            // "http://127.0.0.1:8000/summarize/"
-            "https://medbriefbackend-production.up.railway.app/summarize/" + this.text,
-            // {
-            //   headers: {
-            //     Accept: "application/json",
-            //     Authorization: `Bearer ${this.accessToken}`,
-            //   },
-            // }
-          )
-            .then((response) => {
-              return response.json();
-            })
-            .then((data) => {
-              console.log(data["summary"]);
-              
-              this.initialPrompt = this.text;
-              this.text = data["summary"];
-              this.loadingResult = false;
-              // set an HTTP-only cookie with the 'access_token' value
-              Cookies.set("report", this.text, { secure: true });
-              console.log("cookie report:", Cookies.get("report"))
-              console.log("this.text", this.text)
-            });
-        } catch (error) {
-          console.log(error);
-          this.text = "Something went wrong please try again";
-          this.loadingResult = false;
 
-        }
+                  .then((response) => {
+                                return response.data;
+                              })
+                              
+                              .then((data) => {
+                                console.log(data);
+                                
+                                this.initialPrompt = this.text;
+                                this.text = data["summary"];
+                                this.keywords = data["keywords"]
+                                this.medicines = data["medicines"]
+                                this.lifestyle = data["lifestyle"]
+                                this.loadingResult = false;
+                                Cookies.set("report", this.text, { secure: true });
+                                console.log("cookie report:", Cookies.get("report"))
+                                console.log("this.text", this.text)
+                              });
+
+
+
+                  (error) => {
+                    
+                    console.log(error);
+                            this.text = "Something went wrong please try again";
+                            this.loadingResult = false;
+                    
+
+                    // handle the error
+                  }
+                
+
+    }
         
       
       
-    },
+    
 
     
   },
@@ -132,7 +162,7 @@ input[type="range"] {
   align-items: justify-content;
 }
 .button-3 {
-float: left;
+  float: left;
   appearance: none;
   background-color: #2ea44f;
   border: 1px solid rgba(27, 31, 35, 0.15);

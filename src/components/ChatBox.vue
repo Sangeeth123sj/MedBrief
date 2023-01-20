@@ -38,6 +38,7 @@
 
 <script>
 import Cookies from "js-cookie";
+import axios from "axios";
 export default {
   data() {
     return {
@@ -56,37 +57,80 @@ export default {
       if (this.report){
         this.loadingAnswer = true;
         this.reportStatus = true
-         try {
-          fetch(
-            
-            // "http://127.0.0.1:8000/q_and_a/" 
-            "https://medbriefbackend-production.up.railway.app/q_and_a/"+ this.report+`\nQuestion:`+this.question,
-            // {
-            //   headers: {
-            //     Accept: "application/json",
-            //     Authorization: `Bearer ${this.accessToken}`,
-            //   },
-            // }
-          )
-            .then((response) => {
-              return response.json();
-            })
-            .then((data) => {
-              console.log(data["answer"]);
-              
-             
-              this.answer = data["answer"];
-              this.loadingAnswer = false;
+                                      //   try {
+                                      //     fetch(
+                                            
+                                      //       "http://127.0.0.1:8000/q_and_a/" 
+                                      //       // "https://medbriefbackend-production.up.railway.app/q_and_a/"
+                                      //       + this.report+`\nQuestion:`+this.question,
+                                      //       // {
+                                      //       //   headers: {
+                                      //       //     Accept: "application/json",
+                                      //       //     Authorization: `Bearer ${this.accessToken}`,
+                                      //       //   },
+                                      //       // }
+                                      //     )
+                                      //       .then((response) => {
+                                      //         return response.json();
+                                      //       })
+                                      //       .then((data) => {
+                                      //         console.log(data["answer"]);
+                                              
+                                            
+                                      //         this.answer = data["answer"];
+                                      //         this.loadingAnswer = false;
 
-              
-            });
-        } catch (error) {
-          console.log(error);
-          this.answer = "Something went wrong please try again."
-          this.loadingAnswer = false;
-        }
+                                              
+                                      //       });
+                                      //   } catch (error) {
+                                      //     console.log(error);
+                                      //     this.answer = "Something went wrong please try again."
+                                      //     this.loadingAnswer = false;
+                                      //   }
 
 
+                                      // }
+
+                                       axios.post(
+                 
+                  // "http://127.0.0.1:8000/q_and_a/" ,
+                                            "https://medbriefbackend-production.up.railway.app/q_and_a/",
+                                      //       + this.report+`\nQuestion:`+this.question,
+                  {
+                    text: this.report+`\nQuestion:`+this.question,
+                  },
+                  {
+                    headers: {
+                      "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                  }
+                )
+
+
+                  .then((response) => {
+                                return response.data;
+                              })
+                              
+                              .then((data) => {
+                                console.log(data["answer"]);
+                                              
+                                            
+                                this.answer = data["answer"];
+                                this.loadingAnswer = false;
+                              });
+
+
+
+                  (error) => {
+                    
+                    console.log(error);
+                            console.log(error);
+                            this.answer = "Something went wrong please try again."
+                            this.loadingAnswer = false;
+                    
+
+                    // handle the error
+                  }
       }
       else{
           this.answer = "Please submit and summarize the report first."
