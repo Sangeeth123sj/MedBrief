@@ -15,16 +15,16 @@
     </div>
   </div> -->
   <h2>Q & A</h2>
-<div class="rectangle">
+<div class="rectangle mobile-padding">
   <div class="message-area">
     <br/><br/>
     <strong class="answer-align">{{this.answer}}</strong>
   </div>
-  <div class="input-area">
+  <div class="input-area mobile-accomodate-input">
     
     <form @submit.prevent="submitForm">
        
-    <input type="text" v-model="question" class="input-field" placeholder="chat">
+    <input type="text" v-model="question" class="input-field mobile-margin" placeholder="chat">
    
     <button class="btn btn-primary chat-button">Send
       <div v-if="loadingAnswer" >
@@ -112,21 +112,33 @@ export default {
 
 .rectangle {
   width: 100%;
-  height: 90%;
+  height: 80%;
   border: 1px solid black;
   position: relative;
   border-radius:5px;
+  /* background-color: white; */
 }
 
 .message-area {
   width: 100%;
-  height: 80%;
+  height: 85%;
   overflow: scroll;
+
+}
+
+.message-area::-webkit-scrollbar {
+  background-color: #163d69;
+  width: 0.1em;
+}
+
+.message-area::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 0.5em;
 }
 
 .input-area {
-  
-  position: absolute;
+
+  position: relative;
   bottom: 0;
   width: 100%;
   display: flex;
@@ -135,6 +147,8 @@ export default {
 }
 
 .input-field {
+       /*  */
+  background-color: #144272;
   flex-grow: 1;
   padding: 10px;
   border: 2px;
@@ -156,7 +170,8 @@ export default {
 }
 
 .chatbox-input button {
-  padding: 5px 10px;
+  padding: 5px 10px 5px 10px;
+  margin: 30px;
   border-radius: 5px;
   background-color: #4CAF50;
   color: white;
@@ -169,5 +184,17 @@ width: 100%; /* or any desired width in pixels or percentage */
 .answer-align{
   float: left;
   padding: 10px;
+}
+
+
+@media screen and (max-width: 575px) {
+  .mobile-padding {
+    padding-top: 50px; /* 10px top and bottom padding */
+    padding-bottom: 50px;
+  }
+  .mobile-margin{
+    margin-bottom: 60px;
+
+  }
 }
 </style>

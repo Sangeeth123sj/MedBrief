@@ -10,7 +10,7 @@
         <br />
       </div>
       <textarea
-        class="form-control black-border"
+        class="black-border"
         rows="18"
        
         type="text"
@@ -116,6 +116,7 @@ export default {
 /* CSS */
 .black-border {
     border: 3px solid black;
+    border-radius: 6px;
 }
 textarea{
     border:black;

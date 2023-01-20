@@ -3,16 +3,16 @@
 <div>
 <h1>MedBrief  <img src="/src/assets/logo.png" class="align-logo" width="30" height="30" /></h1>
 </div>
- <div class="container">
-  <div class="row">
-    <div class="col-8">
-      <ReportInput />
-    </div>
-    <div class="col-4">
-      <ChatBox />
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-8 col-md-8">
+        <ReportInput />
+      </div>
+      <div class="col-sm-4 col-md-4 mobile-padding">
+        <ChatBox />
+      </div>
     </div>
   </div>
-</div>
 
 </template>
 <script setup>
@@ -33,5 +33,13 @@ import ChatBox from "./components/ChatBox.vue"
 }
 .align-logo{
   display: inline-block;
+}
+
+
+
+@media screen and (max-width: 575px) {
+  .mobile-padding {
+    padding-top: 100px; /* 10px top and bottom padding */
+  }
 }
 </style>
